@@ -1,4 +1,4 @@
-function Remove-WrikeCustomField {
+<# function Remove-WrikeCustomField {
     [CmdletBinding()]
     Param (
     )
@@ -13,3 +13,4 @@ function Remove-WrikeCustomField {
     END {
     }
 }
+ #>
