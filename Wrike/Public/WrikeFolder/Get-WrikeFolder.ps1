@@ -58,22 +58,12 @@ function Get-WrikeFolder {
             foreach ($field in $entry.customFields) {
                 $FieldLookup = $global:WrikeServer.CustomFields | Where-Object { $_.CustomFieldId -eq $field.id }
 
-                $FieldDefinition = "" | Select-Object Title, Value
+                $FieldDefinition = "" | Select-Object Id, Title, Value
+                $FieldDefinition.Id = $field.id
                 $FieldDefinition.Title = $FieldLookup.Title
                 $FieldDefinition.Value = $field.value
 
                 $New.CustomField += $FieldDefinition
-            }
-
-            # this will only apply to instances with a Project Manager custom field defined as a contact
-            $ProjectManagerLookup = $New.CustomField | Where-Object { $_.Title -eq 'Project Manager' }
-            if ($ProjectManagerLookup) {
-                $ContactLookup = $global:WrikeServer.Contacts | Where-Object { $_.ContactId -eq $ProjectManagerLookup.Value }
-                if ($ContactLookup) {
-                    $TextInfo = (Get-Culture).TextInfo
-                    $ProjectManagerLookup.Value = $ContactLookup.FirstName + ' ' + $ContactLookup.LastName
-                    $ProjectManagerLookup.Value = $TextInfo.ToTitleCase($ProjectManagerLookup.Value)
-                }
             }
 
             $ReturnObject += $New
