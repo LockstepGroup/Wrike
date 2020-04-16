@@ -65,6 +65,17 @@ function Get-WrikeFolder {
                 $New.CustomField += $FieldDefinition
             }
 
+            # this will only apply to instances with a Project Manager custom field defined as a contact
+            $ProjectManagerLookup = $New.CustomField | Where-Object { $_.Title -eq 'Project Manager' }
+            if ($ProjectManagerLookup) {
+                $ContactLookup = $global:WrikeServer.Contacts | Where-Object { $_.ContactId -eq $ProjectManagerLookup.Value }
+                if ($ContactLookup) {
+                    $TextInfo = (Get-Culture).TextInfo
+                    $ProjectManagerLookup.Value = $ContactLookup.FirstName + ' ' + $ContactLookup.LastName
+                    $ProjectManagerLookup.Value = $TextInfo.ToTitleCase($ProjectManagerLookup.Value)
+                }
+            }
+
             $ReturnObject += $New
         }
     }

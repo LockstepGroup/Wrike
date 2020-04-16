@@ -1,4 +1,4 @@
-function Remove-WrikeContact {
+<# function Remove-WrikeContact {
     [CmdletBinding()]
     Param (
     )
@@ -13,3 +13,4 @@ function Remove-WrikeContact {
     END {
     }
 }
+ #>

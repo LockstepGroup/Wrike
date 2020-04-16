@@ -1,4 +1,4 @@
-function Set-WrikeContact {
+<# function Set-WrikeContact {
     [CmdletBinding()]
     Param (
     )
@@ -13,3 +13,4 @@ function Set-WrikeContact {
     END {
     }
 }
+ #>
