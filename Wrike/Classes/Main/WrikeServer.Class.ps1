@@ -3,7 +3,8 @@ Class WrikeServer {
     [string]$UriPath
     [string]$ApiToken
 
-    $CustomFieldDefinitions
+    [array]$CustomFields
+    [array]$Contacts
 
     #region Tracking
     ########################################################################

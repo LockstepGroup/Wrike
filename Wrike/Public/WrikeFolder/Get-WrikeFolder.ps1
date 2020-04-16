@@ -17,6 +17,10 @@ function Get-WrikeFolder {
         if (-not $global:WrikeServer.CustomFieldDefinitions) {
             Get-WrikeCustomField | Out-Null
         }
+
+        if (-not $global:WrikeServer.Contacts) {
+            Get-WrikeContact | Out-Null
+        }
     }
 
     PROCESS {
@@ -52,7 +56,7 @@ function Get-WrikeFolder {
 
             # process custom fields
             foreach ($field in $entry.customFields) {
-                $FieldLookup = $global:WrikeServer.CustomFieldDefinitions | Where-Object { $_.CustomFieldId -eq $field.id }
+                $FieldLookup = $global:WrikeServer.CustomFields | Where-Object { $_.CustomFieldId -eq $field.id }
 
                 $FieldDefinition = "" | Select-Object Title, Value
                 $FieldDefinition.Title = $FieldLookup.Title

@@ -28,7 +28,7 @@ function Get-WrikeCustomField {
     }
 
     END {
-        $global:WrikeServer.CustomFieldDefinitions = $ReturnObject
+        $global:WrikeServer.CustomFields = $ReturnObject
         $ReturnObject
     }
 }
