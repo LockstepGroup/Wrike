@@ -85,14 +85,3 @@ function Set-WrikeFolder {
         $ReturnObject
     }
 }
-
-
-
-#curl -g -X POST -H 'Authorization: bearer asdf' -d 'metadata=[{"key":"testMetaKey","value":"testMetaValue"}]
-#&customFields=[{"id":"IEAAADFOJUAAAACH","value":"testValue"}]
-#&description=Test description
-#&project={"ownerIds":["KUAAAF4P"],"status":"Red","startDate":"2020-03-25","endDate":"2020-04-01"}
-#&title=Test folder
-#&shareds=["KUAAAF4P"]' 'https://www.wrike.com/api/v4/folders/IEAAADFOI4AB5LMX/folders'
-
-#curl -g -X PUT -H 'Authorization: bearer eyJ0dCI6InAiLCJhbGciOiJIUzI1NiIsInR2IjoiMSJ9.eyJkIjoie1wiYVwiOjMyNDYsXCJpXCI6OTY1LFwiY1wiOjEyMjYsXCJ2XCI6XCJcIixcInVcIjo2MDMxLFwiclwiOlwiVVNcIixcInNcIjpbXCJOXCIsXCJJXCIsXCJXXCIsXCJGXCIsXCJLXCIsXCJVXCIsXCJDXCIsXCJBXCIsXCJMXCIsXCJCXCIsXCJEXCJdLFwielwiOltdLFwidFwiOjE1ODUxMzk4MDgwMDB9IiwiZXhwIjoxNTg1MTM5ODA4LCJpYXQiOjE1ODUxMzYyMDh9.IHV1owDzlKvpKwZCAyZaYVOBFPmi115oFgksKVFbxSo' -d 'metadata=[{"key":"testMetaKey","value":"testMetaValue"}]&addShareds=["KUAAAF4P"]&customFields=[{"id":"IEAAADFOJUAAAACH","value":"testValue"}]&description=New description&project={"ownersAdd":["KUAAAF4P"],"ownersRemove":["KUAAAF4Q"],"status":"Red","startDate":"2020-03-25","endDate":"2020-04-01"}&addParents=["IEAAADFOI7777777"]&title=New title' 'https://www.wrike.com/api/v4/folders/IEAAADFOI4AB5LMX'

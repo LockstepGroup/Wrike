@@ -83,11 +83,19 @@ Class WrikeServer {
         try {
             $QueryParams = @{}
             $QueryParams.Uri = $url
-            if ($method -eq 'PUT') {
+            switch ($method) {
+                'PUT' {
+                    $QueryParams.Uri += $this.createQueryString($queryString)
+                }
+                'POST' {
+                    $QueryParams.Body = $this.createBodyString($queryString)
+                }
+            }
+            <# if ($method -eq 'PUT') {
                 $QueryParams.Uri += $this.createQueryString($queryString)
             } else {
                 $QueryParams.Body = $this.createBodyString($queryString)
-            }
+            } #>
             $QueryParams.Method = $method
             $QueryParams.Headers = @{
                 'Authorization' = "bearer $($this.ApiToken)"
