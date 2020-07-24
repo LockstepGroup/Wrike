@@ -3,6 +3,7 @@ Class WrikeCustomField {
     [string]$Title
     [string]$Type
     [string[]]$SharedId
+    $Value
     $Settings
 
     # fulldata for reference

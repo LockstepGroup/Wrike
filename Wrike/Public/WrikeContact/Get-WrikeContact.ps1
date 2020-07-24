@@ -1,6 +1,11 @@
 function Get-WrikeContact {
     [CmdletBinding()]
     Param (
+        [Parameter(Mandatory = $false)]
+        [string]$FirstName,
+
+        [Parameter(Mandatory = $false)]
+        [string]$LastName
     )
 
     BEGIN {
@@ -32,6 +37,9 @@ function Get-WrikeContact {
 
     END {
         $global:WrikeServer.Contacts = $ReturnObject
+        if ($FirstName -or $LastName) {
+            $ReturnObject = $ReturnObject | Where-Object { $_.FirstName -eq $FirstName -and $_.LastName -eq $LastName }
+        }
         $ReturnObject
     }
 }

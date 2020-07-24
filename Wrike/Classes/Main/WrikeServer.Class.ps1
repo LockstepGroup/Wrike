@@ -43,6 +43,20 @@ Class WrikeServer {
         return $queryString
     }
 
+    # Create query string
+    [string] createQueryString ([hashtable]$hashTable) {
+        $i = 0
+        $queryString = "?"
+        foreach ($hash in $hashTable.GetEnumerator()) {
+            $i++
+            $queryString += $hash.Name + "=" + $hash.Value
+            if ($i -lt $HashTable.Count) {
+                $queryString += "&"
+            }
+        }
+        return $queryString
+    }
+
     #region processQueryResult
     ########################################################################
 
@@ -69,7 +83,11 @@ Class WrikeServer {
         try {
             $QueryParams = @{}
             $QueryParams.Uri = $url
-            $QueryParams.Body = $this.createBodyString($queryString)
+            if ($method -eq 'PUT') {
+                $QueryParams.Uri += $this.createQueryString($queryString)
+            } else {
+                $QueryParams.Body = $this.createBodyString($queryString)
+            }
             $QueryParams.Method = $method
             $QueryParams.Headers = @{
                 'Authorization' = "bearer $($this.ApiToken)"

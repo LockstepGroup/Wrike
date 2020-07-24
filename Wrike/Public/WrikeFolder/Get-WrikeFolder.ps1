@@ -58,8 +58,8 @@ function Get-WrikeFolder {
             foreach ($field in $entry.customFields) {
                 $FieldLookup = $global:WrikeServer.CustomFields | Where-Object { $_.CustomFieldId -eq $field.id }
 
-                $FieldDefinition = "" | Select-Object Id, Title, Value
-                $FieldDefinition.Id = $field.id
+                $FieldDefinition = New-WrikeCustomField #Select-Object Id, Title, Value
+                $FieldDefinition.CustomFieldId = $field.id
                 $FieldDefinition.Title = $FieldLookup.Title
                 $FieldDefinition.Value = $field.value
 
