@@ -30,3 +30,9 @@ config.json*
 
 # Log Files
 *.log
+
+# code coverage files
+cov.xml
+
+# testing files
+testing.ps1
