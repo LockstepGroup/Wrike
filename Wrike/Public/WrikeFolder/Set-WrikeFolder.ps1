@@ -21,9 +21,16 @@ function Set-WrikeFolder {
         }
 
         $QueryParams = @{}
-        $QueryParams.UriPath = 'folders/' + $WrikeFolder.ParentId + '/folders'
+
+        if ($null -ne $WrikeFolder.FolderId) {
+            $QueryParams.Method = 'PUT'
+            $QueryParams.UriPath = 'folders/' + $WrikeFolder.FolderId
+        } else {
+            $QueryParams.UriPath = 'folders/' + $WrikeFolder.ParentId + '/folders'
+            $QueryParams.Method = 'POST'
+        }
+
         $QueryParams.Query = @{}
-        $QueryParams.Method = 'POST'
 
         # title
         if ($WrikeFolder.Title) {
@@ -35,7 +42,8 @@ function Set-WrikeFolder {
 
         # customfields
         if ($WrikeFolder.CustomField.Count -gt 0) {
-            $ThisBodyString = @()
+            #$ThisBodyString = @()
+            $ThisBodyArray = @()
             foreach ($field in $WrikeFolder.CustomField) {
                 if (-not $field.CustomFieldId) {
                     if ($WrikeServer.CustomFields.Count -eq 0) {
@@ -43,9 +51,14 @@ function Set-WrikeFolder {
                     }
                     $field.CustomFieldId = ($WrikeServer.CustomFields | Where-Object { $_.Title -eq $field.Title }).CustomFieldId
                 }
-                $ThisBodyString += '{"id":"' + $field.CustomFieldId + '","value":"' + $field.Value + '"}'
+                #$ThisBodyString += '{"id":"' + $field.CustomFieldId + '","value":"' + $field.Value + '"}'
+                $ThisBodyArray += @{
+                    'id'    = $field.CustomFieldId
+                    'value' = $field.Value
+                }
             }
-            $QueryParams.Query.customFields = '[' + ($ThisBodyString -join ',') + ']'
+            #$QueryParams.Query.customFields = '[' + ($ThisBodyString -join ',') + ']'
+            $QueryParams.Query.customFields = $ThisBodyArray | ConvertTo-Json -Compress
         }
 
         # project properties
@@ -53,6 +66,21 @@ function Set-WrikeFolder {
         if ($WrikeFolder.Status) {
             $ThisBodyString = '"status":"'
             $ThisBodyString += $WrikeFolder.Status
+            $ThisBodyString += '"'
+            $ProjectBodyString += $ThisBodyString
+        }
+
+        if ($WrikeFolder.StartDate -and ($WrikeFolder.StartDate -ne (Get-Date 1/1/0001))) {
+            $ThisBodyString = '"startDate":"'
+            $ThisBodyString += Get-Date -Date $WrikeFolder.StartDate -Format yyyy-MM-dd
+            $ThisBodyString += '"'
+            $ProjectBodyString += $ThisBodyString
+        }
+
+        # FinishDate
+        if ($WrikeFolder.FinishDate -and ($WrikeFolder.FinishDate -ne (Get-Date 1/1/0001))) {
+            $ThisBodyString = '"endDate":"'
+            $ThisBodyString += Get-Date -Date $WrikeFolder.FinishDate -Format yyyy-MM-dd
             $ThisBodyString += '"'
             $ProjectBodyString += $ThisBodyString
         }

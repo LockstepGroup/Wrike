@@ -49,6 +49,12 @@ function Get-WrikeFolder {
                 $New.Status = $entry.project.status
                 $New.CustomStatusId = $entry.project.customStatusId
                 $New.CreateDate = $entry.project.createdDate
+                if ($entry.project.startDate) {
+                    $New.StartDate = $entry.project.startDate
+                }
+                if ($entry.project.endDate) {
+                    $New.FinishDate = $entry.project.endDate
+                }
             } else {
                 $New.FolderType = 'Folder'
             }

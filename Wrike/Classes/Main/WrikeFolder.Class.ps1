@@ -22,6 +22,8 @@ Class WrikeFolder {
 
     [datetime]$UpdateDate
     [datetime]$CreateDate
+    [datetime]$StartDate
+    [datetime]$FinishDate
 
     # custom fields
     [array]$CustomField

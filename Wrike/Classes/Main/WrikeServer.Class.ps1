@@ -49,7 +49,7 @@ Class WrikeServer {
         $queryString = "?"
         foreach ($hash in $hashTable.GetEnumerator()) {
             $i++
-            $queryString += $hash.Name + "=" + $hash.Value
+            $queryString += $hash.Name + "=" + [System.Web.HTTPUtility]::UrlEncode($hash.Value)
             if ($i -lt $HashTable.Count) {
                 $queryString += "&"
             }
