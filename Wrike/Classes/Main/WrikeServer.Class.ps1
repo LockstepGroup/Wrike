@@ -44,7 +44,7 @@ Class WrikeServer {
     }
 
     # Create query string
-    [string] createQueryString ([hashtable]$hashTable) {
+    <# [string] createQueryString ([hashtable]$hashTable) {
         $i = 0
         $queryString = "?"
         foreach ($hash in $hashTable.GetEnumerator()) {
@@ -55,6 +55,16 @@ Class WrikeServer {
             }
         }
         return $queryString
+    } #>
+
+    [string] createQueryString ([hashtable]$hashTable) {
+        $QueryString = [System.Web.httputility]::ParseQueryString("")
+
+        foreach ($Pair in $hashTable.GetEnumerator()) {
+            $QueryString[$($Pair.Name)] = $($Pair.Value)
+        }
+
+        return ("?" + $QueryString.ToString())
     }
 
     #region processQueryResult
