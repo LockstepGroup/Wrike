@@ -25,6 +25,7 @@ function Set-WrikeFolder {
         if ($null -ne $WrikeFolder.FolderId) {
             $QueryParams.Method = 'PUT'
             $QueryParams.UriPath = 'folders/' + $WrikeFolder.FolderId
+            $ExistingFolder = Get-WrikeFolder -FolderId $WrikeFolder.FolderId
         } else {
             $QueryParams.UriPath = 'folders/' + $WrikeFolder.ParentId + '/folders'
             $QueryParams.Method = 'POST'
@@ -94,6 +95,40 @@ function Set-WrikeFolder {
 
         $Query = Invoke-WrikeApiQuery @QueryParams
         $NewFolderId = $Query.data.id
+
+        # check for parentid changes on existing folders
+        if ($ExistingFolder) {
+            $MissingParentIds = $WrikeFolder.ParentId | Where-Object { $ExistingFolder.ParentId -notcontains $_ }
+            $ParentIdsToBeRemoved = $ExistingFolder.ParentId | Where-Object { $WrikeFolder.ParentId -notcontains $_ }
+
+            if ($MissingParentIds.Count -gt 0) {
+                foreach ($ParentId in $MissingParentIds) {
+                    Write-Verbose "$VerbosePrefix Missing Parent ID: $ParentId"
+                }
+
+                $QueryParams = @{}
+                $QueryParams.UriPath = 'folders/' + $NewFolderId
+                $QueryParams.Query = @{}
+                $QueryParams.Method = 'PUT'
+
+                $QueryParams.Query.addParents = '[' + ($MissingParentIds -join ',') + ']'
+                $Query = Invoke-WrikeApiQuery @QueryParams
+            }
+
+            if ($ParentIdsToBeRemoved.Count -gt 0) {
+                foreach ($ParentId in $ParentIdsToBeRemoved) {
+                    Write-Verbose "$VerbosePrefix Parent ID to be Removed: $ParentId"
+                }
+
+                $QueryParams = @{}
+                $QueryParams.UriPath = 'folders/' + $NewFolderId
+                $QueryParams.Query = @{}
+                $QueryParams.Method = 'PUT'
+
+                $QueryParams.Query.removeParents = '[' + ($ParentIdsToBeRemoved -join ',') + ']'
+                $Query = Invoke-WrikeApiQuery @QueryParams
+            }
+        }
 
         # add additional parent folders
         if ($AdditionalParents) {
