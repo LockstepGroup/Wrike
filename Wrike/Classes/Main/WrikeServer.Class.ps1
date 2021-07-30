@@ -111,6 +111,7 @@ Class WrikeServer {
                 'Authorization' = "bearer $($this.ApiToken)"
             }
 
+            $Global:TestQueryParams = $QueryParams
             $rawResult = Invoke-RestMethod @QueryParams
         } catch {
             Throw $_

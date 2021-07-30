@@ -36,7 +36,6 @@ function Set-WrikeFolder {
         # title
         if ($WrikeFolder.Title) {
             $QueryParams.Query.title = $WrikeFolder.Title
-            $ThisBodyString = 'title=' + $WrikeFolder.Title
         } else {
             Throw "$VerbosePrefix no Title set, all folders/projects require a Title"
         }
@@ -64,6 +63,16 @@ function Set-WrikeFolder {
 
         # project properties
         $ProjectBodyString = @()
+
+        # customStatusId
+        if ($WrikeFolder.CustomStatusId) {
+            $ThisBodyString = '"customStatusId":"'
+            $ThisBodyString += $WrikeFolder.CustomStatusId
+            $ThisBodyString += '"'
+            $ProjectBodyString += $ThisBodyString
+        }
+
+        # status
         if ($WrikeFolder.Status) {
             $ThisBodyString = '"status":"'
             $ThisBodyString += $WrikeFolder.Status
@@ -71,6 +80,7 @@ function Set-WrikeFolder {
             $ProjectBodyString += $ThisBodyString
         }
 
+        # start date
         if ($WrikeFolder.StartDate -and ($WrikeFolder.StartDate -ne (Get-Date 1/1/0001))) {
             $ThisBodyString = '"startDate":"'
             $ThisBodyString += Get-Date -Date $WrikeFolder.StartDate -Format yyyy-MM-dd
@@ -90,8 +100,6 @@ function Set-WrikeFolder {
             $ProjectBodyString = $ProjectBodyString -join ','
             $QueryParams.Query.project = '{' + $ProjectBodyString + '}'
         }
-
-        $global:test = $QueryParams
 
         $Query = Invoke-WrikeApiQuery @QueryParams
         $NewFolderId = $Query.data.id
