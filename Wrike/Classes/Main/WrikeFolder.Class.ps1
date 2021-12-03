@@ -19,6 +19,7 @@ Class WrikeFolder {
     [string[]]$OwnerId
     [string]$Status
     [string]$CustomStatusId
+    [string]$CustomStatusName
 
     [datetime]$UpdateDate
     [datetime]$CreateDate

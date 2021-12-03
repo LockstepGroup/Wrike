@@ -5,6 +5,7 @@ Class WrikeServer {
 
     [array]$CustomFields
     [array]$Contacts
+    [array]$Workflows
 
     #region Tracking
     ########################################################################

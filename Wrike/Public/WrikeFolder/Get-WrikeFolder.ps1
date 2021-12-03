@@ -21,6 +21,10 @@ function Get-WrikeFolder {
         if (-not $global:WrikeServer.Contacts) {
             Get-WrikeContact | Out-Null
         }
+
+        if (-not $global:WrikeServer.Workflows) {
+            Get-WrikeWorkFlow | Out-Null
+        }
     }
 
     PROCESS {
@@ -59,7 +63,6 @@ function Get-WrikeFolder {
                 $New.FolderType = 'Folder'
             }
 
-
             # process custom fields
             foreach ($field in $entry.customFields) {
                 $FieldLookup = $global:WrikeServer.CustomFields | Where-Object { $_.CustomFieldId -eq $field.id }
@@ -70,6 +73,16 @@ function Get-WrikeFolder {
                 $FieldDefinition.Value = $field.value
 
                 $New.CustomField += $FieldDefinition
+            }
+
+            # Custom Status
+            if ($New.Status -eq 'Custom') {
+                $CustomStatusLookup = $global:WrikeServer.Workflows.CustomStatus | Where-Object { $_.Id -eq $New.CustomStatusId }
+                if ($CustomStatusLookup) {
+                    $New.CustomStatusName = $CustomStatusLookup.Name
+                } else {
+                    Throw "$VerbosePrefix CustomStatusId not found: $($New.CustomStatusId)"
+                }
             }
 
             $ReturnObject += $New
