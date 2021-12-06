@@ -30,7 +30,11 @@ function Get-WrikeWorkflow {
                 $StatusParam.Group = $status.group
                 $StatusParam.Hidden = $status.hidden
 
-                $New.CustomStatus += New-WrikeCustomStatus @StatusParam
+                $NewCustomStatus = New-WrikeCustomStatus @StatusParam
+                $NewCustomStatus.StandardName = $status.standardName
+                $NewCustomStatus.Standard = $status.standard
+
+                $New.CustomStatus += $NewCustomStatus
             }
 
             $ReturnObject += $New
